@@ -30,6 +30,23 @@ router.post('/users/:id', (req,res)=> {
     .then((data)=> res.json(data))
     .catch((error)=>res.json({message: error}));
 });
+
+// Obtener un usuario por su correo electrónico
+router.get('/users/email', (req, res) => {
+
+    const { email } = req.body;
+    userSchema
+      .findOne({ email }) // Buscar por el campo email
+      .select('_id')
+      .then((data) => {
+        if (!data) {
+          return res.status(404).json({ message: 'Usuario no encontrado' });
+        }
+        res.json(data);
+      })
+      .catch((error) => res.json({ message: error }));
+});
+
 //update a user
 router.put('/users/:id', (req,res)=> {
     const {id}=req.params;
