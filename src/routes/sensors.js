@@ -4,10 +4,10 @@ const sensorSchema = require('../models/sensors');
 const router = express.Router();
 
 // Crear un nuevo sensor
-router.post('/users/:userId/sensors', async (req, res) => {
+router.post('/users/sensors', async (req, res) => {
     try {
-      const { name, userId, numericData, dateData } = req.body;
-      const sensor = new sensorSchema({ name, userId, numericData, dateData });
+      const { name, userId, place, paid, numericData, dateData } = req.body;
+      const sensor = new sensorSchema({ name, userId, place, paid, numericData, dateData });
       await sensor.save();
       res.json(sensor);
     } catch (error) {
@@ -16,14 +16,14 @@ router.post('/users/:userId/sensors', async (req, res) => {
   });
   
   // Enviar datos relacionados a un sensor
-  router.post('/users/:userId/sensors/:sensorId/data', async (req, res) => {
+  router.post('/users/sensors/data', async (req, res) => {
     try {
-      const sensor = await sensorSchema.findById(req.params.sensorId);
+      const sensor = await sensorSchema.findById(req.body.sensorId);
       if (!sensor) {
         return res.status(404).json({ error: 'Sensor no encontrado' });
       }
       
-      const { numericData, dateData } = req.body;
+      const {sensorId, numericData, dateData } = req.body;
       sensor.numericData.push(numericData);
       sensor.dateData.push(dateData);
       await sensor.save();
@@ -37,10 +37,10 @@ router.post('/users/:userId/sensors', async (req, res) => {
 
   
   // Actualizar nombre de un sensor
-  router.put('/users/:userId/sensors/:sensorId/config', async (req, res) => {
+  router.put('/users/sensors/config', async (req, res) => {
     try {
       const sensor = await sensorSchema.findByIdAndUpdate(
-        req.params.sensorId,
+        req.body.sensorId,
         { $set: { name: req.body.name } },
         { new: true }
       );
@@ -56,9 +56,9 @@ router.post('/users/:userId/sensors', async (req, res) => {
   });
   
   // Obtener sensores asociados a un usuario
-  router.get('/users/:userId/sensors', async (req, res) => {
+  router.get('/users/sensors/list', async (req, res) => {
     try {
-      const sensors = await sensorSchema.find({ userId: req.params.userId });
+      const sensors = await sensorSchema.find({ userId: req.body.userId });
       res.json(sensors);
     } catch (error) {
       res.status(500).json({ error: 'Error al obtener los sensores asociados al usuario' });
@@ -66,9 +66,9 @@ router.post('/users/:userId/sensors', async (req, res) => {
   });
   
   // Obtener un sensor en específico
-  router.get('/users/:userId/sensors/:sensorId', async (req, res) => {
+  router.get('/users/sensors/unique', async (req, res) => {
     try {
-      const sensor = await sensorSchema.findById(req.params.sensorId);
+      const sensor = await sensorSchema.findById(req.body.sensorId);
       if (!sensor) {
         return res.status(404).json({ error: 'Sensor no encontrado' });
       }
@@ -79,9 +79,9 @@ router.post('/users/:userId/sensors', async (req, res) => {
   });
   
   // Eliminar un sensor
-  router.delete('/users/:userId/sensors/:sensorId', async (req, res) => {
+  router.delete('/users/sensors/delete', async (req, res) => {
     try {
-      const sensor = await sensorSchema.findByIdAndDelete(req.params.sensorId);
+      const sensor = await sensorSchema.findByIdAndDelete(req.body.sensorId);
       if (!sensor) {
         return res.status(404).json({ error: 'Sensor no encontrado' });
       }

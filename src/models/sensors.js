@@ -11,6 +11,14 @@ const sensorSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
+  place: {
+    type: String,
+    required: true
+  },
+  paid: {
+    type: Number,
+    required: true
+  },
   numericData: [{
     type: Number,
     required: true
@@ -19,6 +27,7 @@ const sensorSchema = new mongoose.Schema({
     type: Date,
     required: true
   }]
+
 });
 
 

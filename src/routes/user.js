@@ -5,7 +5,7 @@ const router = express.Router();
 
 
 
-//create user
+//Crear un usuario
 router.post('/users', (req,res)=> {
     const user = userSchema(req.body);
     user
@@ -14,24 +14,24 @@ router.post('/users', (req,res)=> {
     .catch((error)=>res.json({message: error}));
 });
 
-//get all user
-router.get('/users', (req,res)=> {
+//Obtener todos los usuarios
+router.get('/users/list', (req,res)=> {
     userSchema
     .find()
     .then((data)=> res.json(data))
     .catch((error)=>res.json({message: error}));
 });
 
-//get a user
-router.post('/users/:id', (req,res)=> {
-    const {id}=req.params;
+//Obtener un usuario por Id
+router.get('/users/id', (req,res)=> {
+    const {id}=req.body;
     userSchema
     .findById(id)
     .then((data)=> res.json(data))
     .catch((error)=>res.json({message: error}));
 });
 
-// Obtener un usuario por su correo electrónico
+//Obtener un Id por su correo electrónico
 router.get('/users/email', (req, res) => {
 
     const { email } = req.body;
@@ -47,14 +47,23 @@ router.get('/users/email', (req, res) => {
       .catch((error) => res.json({ message: error }));
 });
 
-//update a user
-router.put('/users/:id', (req,res)=> {
-    const {id}=req.params;
-    const {name,email}=req.body;
+//Actualizar información de un usuario
+router.put('/users/config', (req,res)=> {
+    //const {id}=req.params;
+    const {id,name,email}=req.body;
     userSchema
     .updateOne({_id: id},{$set: {name, email}})
-    .then((data)=> res.json(data))
-    .catch((error)=>res.json({message: error}));
+    .then(()=> res.json({message: 'Usuario Actualizado correctamente'}))
+    .catch((error)=>res.json({erro: 'Error al actualizar el usuario'}));
+});
+
+//Eliminar usuario
+router.delete('/users/delete', (req,res)=> {
+    const {id}=req.body;
+    userSchema
+    .findById(id)
+    .then(()=> res.json({message: 'Usuario eliminado correctamente'}))
+    .catch((error)=>res.json({error: 'Error al eliminar usuario'}));
 });
 
 module.exports = router;
