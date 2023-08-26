@@ -32,7 +32,7 @@ router.get('/users/id', (req,res)=> {
 });
 
 //Obtener un Id por su correo electrónico
-router.get('/users/email', (req, res) => {
+router.post('/users/email', (req, res) => {
 
     const { email } = req.body;
     userSchema
