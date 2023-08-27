@@ -6,7 +6,7 @@ const router = express.Router();
 // Crear un nuevo sensor
 router.post('/users/sensors', async (req, res) => {
     try {
-      const { name, userId, place, paid, numericData, dateData } = req.body;
+      const { name, userId, place, paid, noti, numericData, dateData } = req.body;
       const sensor = new sensorSchema({ name, userId, place, paid, noti, numericData, dateData });
       await sensor.save();
       res.json(sensor);
