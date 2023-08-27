@@ -7,7 +7,7 @@ const router = express.Router();
 router.post('/users/sensors', async (req, res) => {
     try {
       const { name, userId, place, paid, numericData, dateData } = req.body;
-      const sensor = new sensorSchema({ name, userId, place, paid, numericData, dateData });
+      const sensor = new sensorSchema({ name, userId, place, paid, noti, numericData, dateData });
       await sensor.save();
       res.json(sensor);
     } catch (error) {
@@ -27,7 +27,7 @@ router.post('/users/sensors', async (req, res) => {
       sensor.numericData.push(numericData);
       sensor.dateData.push(dateData);
       await sensor.save();
-  
+
       res.json(sensor);
     } catch (error) {
       console.error(error)
@@ -91,5 +91,24 @@ router.post('/users/sensors', async (req, res) => {
     }
   });
 
+  router.put('/users/sensors/update-noti', async (req, res) => {
+    try {
+        const { sensorId, noti } = req.body;
+
+        const sensor = await sensorSchema.findByIdAndUpdate(
+            sensorId,
+            { $set: { noti: noti } },
+            { new: true }
+        );
+
+        if (!sensor) {
+            return res.status(404).json({ error: 'Sensor no encontrado' });
+        }
+
+        res.json(sensor);
+    } catch (error) {
+        res.status(500).json({ error: 'Error al actualizar la información de notificaciones del sensor' });
+    }
+});
 
 module.exports = router;

@@ -19,6 +19,10 @@ const sensorSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  noti: {
+    type: Boolean,
+    required: true
+  },
   numericData: [{
     type: Number,
     required: true
