@@ -59,7 +59,7 @@ router.post('/users/sensors', async (req, res) => {
   router.post('/users/sensors/list', async (req, res) => {
     try {
       const sensors = await sensorSchema.find({ userId: req.body.userId });
-      res.json(sensors);
+      res.json({sensors});
     } catch (error) {
       res.status(500).json({ error: 'Error al obtener los sensores asociados al usuario' });
     }
