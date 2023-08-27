@@ -56,7 +56,7 @@ router.post('/users/sensors', async (req, res) => {
   });
   
   // Obtener sensores asociados a un usuario
-  router.get('/users/sensors/list', async (req, res) => {
+  router.post('/users/sensors/list', async (req, res) => {
     try {
       const sensors = await sensorSchema.find({ userId: req.body.userId });
       res.json(sensors);
